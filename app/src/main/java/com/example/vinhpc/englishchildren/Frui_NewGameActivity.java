@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 
-public class NewGameActivity extends AppCompatActivity {
+public class Frui_NewGameActivity extends AppCompatActivity {
     TextView tv_score, tv_time;
     Button btnstart_pause, btnexit;
     ImageView iv_11, iv_12, iv_13, iv_14;
@@ -31,7 +31,7 @@ public class NewGameActivity extends AppCompatActivity {
     int clickedFirst, clickedSeconds;
     int cardNumber = 1;
 
-    Intent intentmain, intentnewgame, intentgame2 ;
+    Intent intentmain, intentfruit, intentfruit2 ;
 
     public int Totalscore = 0;
 
@@ -41,17 +41,18 @@ public class NewGameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_game);
-        tv_time = (TextView) findViewById(R.id.textView2);
-        tv_score = (TextView) findViewById(R.id.textView);
+        setContentView(R.layout.activity_frui__new_game);
 
-        btnstart_pause = (Button) findViewById(R.id.button5);
-        btnexit = (Button) findViewById(R.id.button6);
+        tv_score = (TextView) findViewById(R.id.textViewfr1);
+        tv_time = (TextView) findViewById(R.id.textViewfr2);
 
-        iv_11 = (ImageView) findViewById(R.id.iv_11);
-        iv_12 = (ImageView) findViewById(R.id.iv_12);
-        iv_13 = (ImageView) findViewById(R.id.iv_13);
-        iv_14 = (ImageView) findViewById(R.id.iv_14);
+        btnstart_pause = (Button) findViewById(R.id.buttonfr1);
+        btnexit = (Button) findViewById(R.id.buttonfr2);
+
+        iv_11 = (ImageView) findViewById(R.id.fr_11);
+        iv_12 = (ImageView) findViewById(R.id.fr_12);
+        iv_13 = (ImageView) findViewById(R.id.fr_13);
+        iv_14 = (ImageView) findViewById(R.id.fr_14);
 
 
         iv_11.setTag("0");
@@ -68,8 +69,8 @@ public class NewGameActivity extends AppCompatActivity {
 
         /// main_activity intent
         intentmain = new Intent(this, MainScreeenActivity.class);
-        intentnewgame = new Intent(this, NewGameActivity.class);
-        intentgame2 = new Intent(this, Game2Activity.class);
+        intentfruit = new Intent(this, Frui_NewGameActivity.class);
+        intentfruit2 = new Intent(this, Fui_Game2Activity.class);
         /// change color score
         tv_score.setTextColor(Color.WHITE);
         tv_time.setTextColor(Color.WHITE);
@@ -99,16 +100,8 @@ public class NewGameActivity extends AppCompatActivity {
                 // start timer
                 if (mTimerunning){
                     stopTimer();
-                    iv_11.setEnabled(false);
-                    iv_12.setEnabled(false);
-                    iv_13.setEnabled(false);
-                    iv_14.setEnabled(false);
                 } else {
                     startTimer();
-                    iv_11.setEnabled(true);
-                    iv_12.setEnabled(true);
-                    iv_13.setEnabled(true);
-                    iv_14.setEnabled(true);
                 }
 
             }
@@ -254,14 +247,14 @@ public class NewGameActivity extends AppCompatActivity {
                 iv_12.getVisibility() == View.INVISIBLE &&
                 iv_13.getVisibility() == View.INVISIBLE &&
                 iv_14.getVisibility() == View.INVISIBLE){
-            AlertDialog.Builder dialogbuider = new AlertDialog.Builder(NewGameActivity.this);
+            AlertDialog.Builder dialogbuider = new AlertDialog.Builder(Frui_NewGameActivity.this);
             dialogbuider.setMessage("Chúc mừng bạn đã vượt qua vòng 1").setCancelable(false)
                     .setNegativeButton("Tiếp Tục", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            intentgame2.putExtra("Key1", Totalscore);
+                            intentfruit2.putExtra("Key1", Totalscore);
                             finish();
-                            startActivity(intentgame2);
+                            startActivity(intentfruit2);
                         }
                     });
             stopTimer(); // stop time when player pass the level
@@ -270,10 +263,10 @@ public class NewGameActivity extends AppCompatActivity {
         }
     }
     private void frontOfCardResources() {
-        image101 = R.drawable.rabbit;
-        image102 = R.drawable.chicken;
-        image201 = R.drawable.wrabbit;
-        image202 = R.drawable.wchicken;
+        image101 = R.drawable.applered;
+        image102 = R.drawable.kiwi;
+        image201 = R.drawable.wapple;
+        image202 = R.drawable.wkiwi;
     }
 
     public void startTimer(){
@@ -288,13 +281,14 @@ public class NewGameActivity extends AppCompatActivity {
             public void onFinish() {
                 tv_time.setText("Hết Giờ!!!");
                 mTimerunning = false;
-                AlertDialog.Builder dialogbuildtimeup = new AlertDialog.Builder(NewGameActivity.this);
+                AlertDialog.Builder dialogbuildtimeup = new AlertDialog.Builder(Frui_NewGameActivity.this);
                 dialogbuildtimeup.setMessage("Thua rồi! Bạn có muốn chơi lại không ?").setCancelable(false)
                         .setNegativeButton("Có", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Totalscore = 0;
-                                startActivity(intentnewgame);
+                                startActivity(intentfruit);
+                                finish();
                             }
                         }).setPositiveButton("Không", new DialogInterface.OnClickListener() {
                     @Override

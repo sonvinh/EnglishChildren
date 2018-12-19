@@ -111,8 +111,25 @@ public class Game3Activity extends AppCompatActivity {
 
                 if(mTimerunning){
                     stopTimer();
+
+                    iv_21.setEnabled(false);
+                    iv_22.setEnabled(false);
+                    iv_23.setEnabled(false);
+                    iv_24.setEnabled(false);
+                    iv_25.setEnabled(false);
+                    iv_26.setEnabled(false);
+                    iv_27.setEnabled(false);
+                    iv_28.setEnabled(false);
                 }else {
                     startTimer();
+                    iv_21.setEnabled(true);
+                    iv_22.setEnabled(true);
+                    iv_23.setEnabled(true);
+                    iv_24.setEnabled(true);
+                    iv_25.setEnabled(true);
+                    iv_26.setEnabled(true);
+                    iv_27.setEnabled(true);
+                    iv_28.setEnabled(true);
                 }
             }
         });
@@ -337,11 +354,11 @@ public class Game3Activity extends AppCompatActivity {
     private void frontOfCardResources() {
         image101 = R.drawable.shark;
         image102 = R.drawable.sheep;
-        image103 = R.drawable.tomato;
+        image103 = R.drawable.pig;
         image104 = R.drawable.turtle;
         image201 = R.drawable.wshark;
         image202 = R.drawable.wsheep;
-        image203 = R.drawable.wtomato;
+        image203 = R.drawable.wpig;
         image204 = R.drawable.wturtle;
     }
     public void startTimer(){

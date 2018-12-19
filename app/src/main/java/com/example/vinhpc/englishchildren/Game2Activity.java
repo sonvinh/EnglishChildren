@@ -102,8 +102,20 @@ public class Game2Activity extends AppCompatActivity {
 
                 if(mTimerunning){
                     stopTimer();
+                    iv_15.setEnabled(false);
+                    iv_16.setEnabled(false);
+                    iv_17.setEnabled(false);
+                    iv_18.setEnabled(false);
+                    iv_19.setEnabled(false);
+                    iv_20.setEnabled(false);
                 }else {
                     startTimer();
+                    iv_15.setEnabled(true);
+                    iv_16.setEnabled(true);
+                    iv_17.setEnabled(true);
+                    iv_18.setEnabled(true);
+                    iv_19.setEnabled(true);
+                    iv_20.setEnabled(true);
                 }
             }
         });
@@ -294,10 +306,10 @@ public class Game2Activity extends AppCompatActivity {
     private void frontOfCardResources() {
         image101 = R.drawable.bird;
         image102 = R.drawable.mouse;
-        image103 = R.drawable.orange;
+        image103 = R.drawable.cat;
         image201 = R.drawable.wbird;
         image202 = R.drawable.wmouse;
-        image203 = R.drawable.worange;
+        image203 = R.drawable.wcat;
     }
 
     public void startTimer(){

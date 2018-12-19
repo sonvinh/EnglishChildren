@@ -127,8 +127,32 @@ public class Game4Activity extends AppCompatActivity {
 
                 if(mTimerunning){
                     stopTimer();
+                    iv_29.setEnabled(false);
+                    iv_30.setEnabled(false);
+                    iv_31.setEnabled(false);
+                    iv_32.setEnabled(false);
+                    iv_33.setEnabled(false);
+                    iv_34.setEnabled(false);
+                    iv_35.setEnabled(false);
+                    iv_36.setEnabled(false);
+                    iv_37.setEnabled(false);
+                    iv_38.setEnabled(false);
+                    iv_39.setEnabled(false);
+                    iv_40.setEnabled(false);
                 }else {
                     startTimer();
+                    iv_29.setEnabled(true);
+                    iv_30.setEnabled(true);
+                    iv_31.setEnabled(true);
+                    iv_32.setEnabled(true);
+                    iv_33.setEnabled(true);
+                    iv_34.setEnabled(true);
+                    iv_35.setEnabled(true);
+                    iv_36.setEnabled(true);
+                    iv_37.setEnabled(true);
+                    iv_38.setEnabled(true);
+                    iv_39.setEnabled(true);
+                    iv_40.setEnabled(true);
                 }
             }
         });
@@ -420,13 +444,13 @@ public class Game4Activity extends AppCompatActivity {
         }
     }
     private void frontOfCardResources() {
-        image101 = R.drawable.lemon;
+        image101 = R.drawable.hamster;
         image102 = R.drawable.frog;
         image103 = R.drawable.fish;
         image104 = R.drawable.dolphin;
         image105 = R.drawable.dog;
         image106 = R.drawable.horse;
-        image201= R.drawable.wlemon;
+        image201= R.drawable.whamster;
         image202 = R.drawable.wfrog;
         image203 = R.drawable.wfish;
         image204 = R.drawable.wdolphin;

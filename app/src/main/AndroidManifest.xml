@@ -9,20 +9,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainScreeenActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainScreeenActivity" />
         <activity android:name=".NewGameActivity" />
         <activity android:name=".Game2Activity" />
         <activity android:name=".Game3Activity" />
         <activity android:name=".Game4Activity" />
         <activity android:name=".Game5Activity" />
         <activity android:name=".GuideActivity" />
-        <activity android:name=".HighestScoreActivity"></activity>
+        <activity android:name=".HighestScoreActivity" />
+        <activity android:name=".TopicActivity" />
+        <activity android:name=".Frui_NewGameActivity" />
+        <activity android:name=".Fui_Game2Activity" />
+        <activity android:name=".Frui_Game3Activity" />
+        <activity android:name=".Frui_Game4Activity" />
+        <activity android:name=".Frui_Game5Activity" />
+        <activity android:name=".Furn_NewGameActivity" />
+        <activity android:name=".Furn_Game2Activity" />
+        <activity android:name=".Furn_Game3Activity" />
+        <activity android:name=".Furn_Game4Activity" />
+        <activity android:name=".Furn_Game5Activity" />
+        <activity android:name=".RegisterActivity"></activity>
     </application>
 
 </manifest>

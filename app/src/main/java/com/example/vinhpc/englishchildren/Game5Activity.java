@@ -42,8 +42,9 @@ public class Game5Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game5);
-        tv_time = (TextView) findViewById(R.id.textView8);
         tv_score = (TextView) findViewById(R.id.textView7);
+        tv_time = (TextView) findViewById(R.id.textView8);
+
 
         btnstart_pause = (Button) findViewById(R.id.button13);
         btnexit = (Button) findViewById(R.id.button14);
@@ -139,8 +140,40 @@ public class Game5Activity extends AppCompatActivity {
 
                 if(mTimerunning){
                     stopTimer();
+                    iv_41.setEnabled(false);
+                    iv_42.setEnabled(false);
+                    iv_43.setEnabled(false);
+                    iv_44.setEnabled(false);
+                    iv_45.setEnabled(false);
+                    iv_46.setEnabled(false);
+                    iv_47.setEnabled(false);
+                    iv_48.setEnabled(false);
+                    iv_49.setEnabled(false);
+                    iv_50.setEnabled(false);
+                    iv_51.setEnabled(false);
+                    iv_52.setEnabled(false);
+                    iv_53.setEnabled(false);
+                    iv_54.setEnabled(false);
+                    iv_55.setEnabled(false);
+                    iv_56.setEnabled(false);
                 }else {
                     startTimer();
+                    iv_41.setEnabled(false);
+                    iv_42.setEnabled(false);
+                    iv_43.setEnabled(false);
+                    iv_44.setEnabled(false);
+                    iv_45.setEnabled(false);
+                    iv_46.setEnabled(false);
+                    iv_47.setEnabled(false);
+                    iv_48.setEnabled(false);
+                    iv_49.setEnabled(false);
+                    iv_50.setEnabled(false);
+                    iv_51.setEnabled(false);
+                    iv_52.setEnabled(false);
+                    iv_53.setEnabled(false);
+                    iv_54.setEnabled(false);
+                    iv_55.setEnabled(false);
+                    iv_56.setEnabled(false);
                 }
             }
         });
@@ -499,18 +532,18 @@ public class Game5Activity extends AppCompatActivity {
         image101 = R.drawable.cow;
         image102 = R.drawable.crab;
         image103 = R.drawable.duck;
-        image104 = R.drawable.kiwi;
+        image104 = R.drawable.parrot;
         image105 = R.drawable.lobster;
-        image106 = R.drawable.pimiento;
-        image107 = R.drawable.pumpkin;
+        image106 = R.drawable.squid;
+        image107 = R.drawable.squirrel;
         image108 = R.drawable.whale;
         image201= R.drawable.wcow;
         image202 = R.drawable.wcrab;
         image203 = R.drawable.wduck;
-        image204 = R.drawable.wkiwi;
+        image204 = R.drawable.wparrot;
         image205 = R.drawable.wlobster;
-        image206 = R.drawable.wpimiento;
-        image207 = R.drawable.wpumpkin;
+        image206 = R.drawable.wsquid;
+        image207 = R.drawable.wsquirrel;
         image208 = R.drawable.wwhale;
     }
     public void startTimer(){
