@@ -10,15 +10,40 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class Game2Activity extends AppCompatActivity {
+    // save score
+    Date datetime = new Date();
+    SimpleDateFormat sf = new SimpleDateFormat("E yyyy.MM.dd 'vào' hh:mm:ss a");
+    private static String URL_SAVESCORE = "http://ecgame.000webhostapp.com/savescore.php";
+    String score = "";
+    SessionManager sessionManager;
+    // ----- end save score
+
     TextView tv_score, tv_time;
     Button btnstart_pause, btnexit;;
     ImageView iv_15, iv_16, iv_17, iv_18, iv_19, iv_20;
@@ -38,10 +63,11 @@ public class Game2Activity extends AppCompatActivity {
     private CountDownTimer mCoundowntime;
     private long timeLeftinMilliseconds = START_TIME_IN_MILLIS;
     private boolean mTimerunning;
-
+    Music music = new Music();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_game2);
         Intent ite = getIntent();
         Totalscore = ite.getIntExtra("Key1", 0);
@@ -53,7 +79,7 @@ public class Game2Activity extends AppCompatActivity {
 
         intentmain = new Intent(this, MainScreeenActivity.class);
         intentnewgame = new Intent(this,NewGameActivity.class);
-        intentgame3 = new Intent(this,Game3Activity.class);
+        intentgame3 = new Intent(this, Game3Activity.class);
 
         iv_15 = (ImageView) findViewById(R.id.iv_15);
         iv_16 = (ImageView) findViewById(R.id.iv_16);
@@ -75,9 +101,10 @@ public class Game2Activity extends AppCompatActivity {
         iv_18.setEnabled(false);
         iv_19.setEnabled(false);
         iv_20.setEnabled(false);
+        btnexit.setEnabled(false);
 
-        tv_score.setTextColor(Color.WHITE);
-        tv_time.setTextColor(Color.WHITE);
+        tv_score.setTextColor(0xFFF06D2F);
+        tv_time.setTextColor(0xFFF06D2F);
         tv_score.setText("Điểm của bạn:" + Totalscore);
 
         frontOfCardResources();
@@ -85,8 +112,26 @@ public class Game2Activity extends AppCompatActivity {
         btnexit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                startActivity(intentmain);
+                AlertDialog.Builder dialogbuild = new AlertDialog.Builder(Game2Activity.this);
+                dialogbuild.setMessage("Bạn có muốn lưu điểm không ?").setCancelable(false)
+                        .setNegativeButton("Có", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                score = String.valueOf(Totalscore);
+                                SaveS(score);
+                                startActivity(intentmain);
+                                finish();
+                            }
+                        }).setPositiveButton("Không", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(intentmain);
+                        finish();
+                    }
+                });
+                stopTimer(); // stop time when player pass the level
+                AlertDialog alert = dialogbuild.create();
+                alert.show();
             }
         });
 
@@ -94,11 +139,12 @@ public class Game2Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 iv_15.setEnabled(true);
-                iv_16.setEnabled(true);
                 iv_17.setEnabled(true);
+                iv_16.setEnabled(true);
                 iv_18.setEnabled(true);
                 iv_19.setEnabled(true);
                 iv_20.setEnabled(true);
+                btnexit.setEnabled(true);
 
                 if(mTimerunning){
                     stopTimer();
@@ -126,6 +172,7 @@ public class Game2Activity extends AppCompatActivity {
         iv_15.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                music.ClickSound(Game2Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_15, theCard);
             }
@@ -133,6 +180,7 @@ public class Game2Activity extends AppCompatActivity {
         iv_16.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                music.ClickSound(Game2Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_16, theCard);
             }
@@ -140,6 +188,7 @@ public class Game2Activity extends AppCompatActivity {
         iv_17.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                music.ClickSound(Game2Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_17, theCard);
             }
@@ -147,6 +196,7 @@ public class Game2Activity extends AppCompatActivity {
         iv_18.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                music.ClickSound(Game2Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_18, theCard);
             }
@@ -154,6 +204,7 @@ public class Game2Activity extends AppCompatActivity {
         iv_19.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                music.ClickSound(Game2Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_19, theCard);
             }
@@ -161,6 +212,7 @@ public class Game2Activity extends AppCompatActivity {
         iv_20.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                music.ClickSound(Game2Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_20, theCard);
             }
@@ -218,6 +270,7 @@ public class Game2Activity extends AppCompatActivity {
     }
     private void checkImg() {
         if (firstCard == secondCard) {
+            music.Windraw(Game2Activity.this);
             if (clickedFirst == 0) {
                 iv_15.setVisibility(View.INVISIBLE);
             } else if (clickedFirst == 1) {
@@ -288,8 +341,9 @@ public class Game2Activity extends AppCompatActivity {
                 iv_18.getVisibility() == View.INVISIBLE &&
                 iv_19.getVisibility() == View.INVISIBLE &&
                 iv_20.getVisibility() == View.INVISIBLE){
-            AlertDialog.Builder dialogbuider = new AlertDialog.Builder(Game2Activity.this);
-            dialogbuider.setMessage("Chúc mừng bạn đã vượt qua vòng 2").setCancelable(false)
+            music.WinGame(Game2Activity.this);
+            AlertDialog.Builder dialogbuiderd = new AlertDialog.Builder(Game2Activity.this);
+            dialogbuiderd.setMessage("Chúc mừng bạn đã vượt qua vòng 2").setCancelable(false)
                     .setNegativeButton("Tiếp Tục", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -299,7 +353,7 @@ public class Game2Activity extends AppCompatActivity {
                         }
                     });
             stopTimer(); // stop time when player pass the level
-            AlertDialog alert = dialogbuider.create();
+            AlertDialog alert = dialogbuiderd.create();
             alert.show();
         }
     }
@@ -324,6 +378,7 @@ public class Game2Activity extends AppCompatActivity {
             public void onFinish() {
                 tv_time.setText("Hết Giờ!!!");
                 mTimerunning = false;
+                music.Lose(Game2Activity.this);
                 AlertDialog.Builder dialogbuildtimeup = new AlertDialog.Builder(Game2Activity.this);
                 dialogbuildtimeup.setMessage("Thua rồi! Bạn có muốn chơi lại không ?").setCancelable(false)
                         .setNegativeButton("Có", new DialogInterface.OnClickListener() {
@@ -336,6 +391,8 @@ public class Game2Activity extends AppCompatActivity {
                         }).setPositiveButton("Không", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        score = String.valueOf(Totalscore);
+                        SaveS(score);
                         finish();
                         startActivity(intentmain);
                     }
@@ -345,13 +402,13 @@ public class Game2Activity extends AppCompatActivity {
             }
         }.start();
         mTimerunning = true;
-        btnstart_pause.setText("Tạm Dừng");
+        btnstart_pause.setBackgroundResource(R.drawable.btnpause);
 
     }
     public void stopTimer(){
         mCoundowntime.cancel();
         mTimerunning = false;
-        btnstart_pause.setText("Bắt Đầu");
+        btnstart_pause.setBackgroundResource(R.drawable.btnplay);
     }
     public void updateTimer(){
         int minute = (int) (timeLeftinMilliseconds / 1000 )/60;
@@ -359,5 +416,57 @@ public class Game2Activity extends AppCompatActivity {
 
         String timeLeftTextFormat = String.format(Locale.getDefault(),"%02d:%02d", minute, seconds);
         tv_time.setText(timeLeftTextFormat);
+    }
+
+    // Save score
+    public void SaveS(final String score){
+        final String time = sf.format(datetime);
+
+        sessionManager = new SessionManager(this);
+        sessionManager.isLogin();
+        HashMap<String, String> user = sessionManager.getUserDetail();
+        final String username = user.get(sessionManager.USERNAME);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SAVESCORE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success =  jsonObject.getString("success");
+
+                            if (success.equals("1")) {
+                                Toast.makeText(Game2Activity.this, "Save Success!", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(Game2Activity.this, "Save Error!" + e.toString(), Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //Toast.makeText(RegisterActivity.this, "Register Error!" + error.toString(), Toast.LENGTH_SHORT).show();
+
+                    }
+                })
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("score", score);
+                params.put("time", time);
+                params.put("username", username);
+                return params;
+            }
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 }

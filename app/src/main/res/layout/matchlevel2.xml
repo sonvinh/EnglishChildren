@@ -4,64 +4,67 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
         android:layout_weight="1"
+        android:gravity="bottom"
         android:orientation="horizontal"
-        android:weightSum="3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:weightSum="3">
 
         <ImageView
             android:id="@+id/iv_15"
+            android:layout_width="wrap_content"
+            android:layout_height="130dp"
             android:layout_weight="1"
-            android:src="@drawable/randomic"
             android:scaleType="centerInside"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:src="@drawable/randomic" />
+
         <ImageView
             android:id="@+id/iv_16"
+            android:layout_width="wrap_content"
+            android:layout_height="130dp"
             android:layout_weight="1"
-            android:src="@drawable/randomic"
             android:scaleType="centerInside"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:src="@drawable/randomic" />
+
         <ImageView
             android:id="@+id/iv_17"
+            android:layout_width="wrap_content"
+            android:layout_height="130dp"
             android:layout_weight="1"
-            android:src="@drawable/randomic"
             android:scaleType="centerInside"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:src="@drawable/randomic" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
         android:layout_weight="1"
         android:orientation="horizontal"
         android:weightSum="3">
 
 
-
         <ImageView
             android:id="@+id/iv_18"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="130dp"
             android:layout_weight="1"
             android:scaleType="centerInside"
             android:src="@drawable/randomic" />
 
         <ImageView
             android:id="@+id/iv_19"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="130dp"
             android:layout_weight="1"
             android:scaleType="centerInside"
             android:src="@drawable/randomic" />
+
         <ImageView
             android:id="@+id/iv_20"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="130dp"
             android:layout_weight="1"
             android:scaleType="centerInside"
             android:src="@drawable/randomic" />

@@ -10,7 +10,7 @@ public class TopicActivity extends AppCompatActivity {
 
     Button butAnimal, butFruit, butFurniture;
     Intent intentanimal, intentfruit, intentfurni;
-
+    Music music = new Music();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +23,7 @@ public class TopicActivity extends AppCompatActivity {
         intentanimal = new Intent(this, NewGameActivity.class);
         intentfruit = new Intent(this, Frui_NewGameActivity.class);
         intentfurni = new Intent( this, Furn_NewGameActivity.class);
+
         butFurniture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText usernames, passwords;
     Button login;
     TextView link_register;
+    ProgressBar loading;
     private static String URL_LOGIN = "http://ecgame.000webhostapp.com/login.php";
     String mName = "";
     String mPass = "";
@@ -36,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     SessionManager sessionManager;
 
     Intent intentRegister, intentMainScreen;
-
+    Music music = new Music();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         passwords = (EditText)findViewById(R.id.pass);
         login = (Button)findViewById(R.id.login);
         link_register = (TextView)findViewById(R.id.register);
+        loading = (ProgressBar)findViewById(R.id.progressBar);
 
         intentRegister = new Intent(this, RegisterActivity.class);
         intentMainScreen = new Intent(this, MainScreeenActivity.class);
@@ -55,6 +58,9 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                login.setVisibility(View.INVISIBLE);
+                loading.setVisibility(View.VISIBLE);
+                music.ClickSound(LoginActivity.this);
                 mName = usernames.getText().toString().trim();
                 mPass = passwords.getText().toString().trim();
 
@@ -102,19 +108,25 @@ public class LoginActivity extends AppCompatActivity {
                                 }
 
                             } if (success.equals("0")){
-                                Toast.makeText(LoginActivity.this, "Success Fail. \nYour Name: "+username, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Đăng nhập thất bại! Xin vui lòng nhập lại.", Toast.LENGTH_SHORT).show();
+                                login.setVisibility(View.VISIBLE);
+                                loading.setVisibility(View.INVISIBLE);
                             }
 
                         }catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(LoginActivity.this, "Error" + e.toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Lỗi đăng nhập" + e.toString(), Toast.LENGTH_SHORT).show();
+                            login.setVisibility(View.VISIBLE);
+                            loading.setVisibility(View.INVISIBLE);
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(LoginActivity.this, "Error" + error.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Lỗi đăng nhập" + error.toString(), Toast.LENGTH_SHORT).show();
+                        login.setVisibility(View.VISIBLE);
+                        loading.setVisibility(View.INVISIBLE);
                     }
                 })
         {

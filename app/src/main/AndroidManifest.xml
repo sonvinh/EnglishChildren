@@ -35,7 +35,12 @@
         <activity android:name=".Furn_Game3Activity" />
         <activity android:name=".Furn_Game4Activity" />
         <activity android:name=".Furn_Game5Activity" />
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".HistoryActivity"></activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

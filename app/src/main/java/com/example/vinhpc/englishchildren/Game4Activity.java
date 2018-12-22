@@ -9,15 +9,40 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class Game4Activity extends AppCompatActivity {
+    // save score
+    Date datetime = new Date();
+    SimpleDateFormat sf = new SimpleDateFormat("E yyyy.MM.dd 'vào' hh:mm:ss a");
+    private static String URL_SAVESCORE = "http://ecgame.000webhostapp.com/savescore.php";
+    String score = "";
+    SessionManager sessionManager;
+    // ----- end save score
+
     TextView tv_score, tv_time;
     Button btnstart_pause, btnexit;
     ImageView iv_29, iv_30, iv_31, iv_32, iv_33, iv_34, iv_35, iv_36, iv_37, iv_38, iv_39, iv_40;
@@ -38,11 +63,12 @@ public class Game4Activity extends AppCompatActivity {
     private CountDownTimer mCoundowntime;
     private long timeLeftinMilliseconds = START_TIME_IN_MILLIS;
     private boolean mTimerunning;
-
+    Music music = new Music();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game4);
+
         tv_time = (TextView) findViewById(R.id.textView6);
         tv_score = (TextView) findViewById(R.id.textView5);
 
@@ -95,9 +121,10 @@ public class Game4Activity extends AppCompatActivity {
         iv_38.setEnabled(false);
         iv_39.setEnabled(false);
         iv_40.setEnabled(false);
+        btnexit.setEnabled(false);
 
-        tv_score.setTextColor(Color.WHITE);
-        tv_time.setTextColor(Color.WHITE);
+        tv_score.setTextColor(0xFFF06D2F);
+        tv_time.setTextColor(0xFFF06D2F);
         tv_score.setText("Điểm của bạn:" + Totalscore);
 
         frontOfCardResources();
@@ -105,8 +132,26 @@ public class Game4Activity extends AppCompatActivity {
         btnexit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                startActivity(intentmain);
+                AlertDialog.Builder dialogbuil = new AlertDialog.Builder(Game4Activity.this);
+                dialogbuil.setMessage("Bạn có muốn lưu điểm không ?").setCancelable(false)
+                        .setNegativeButton("Có", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                score = String.valueOf(Totalscore);
+                                SaveS(score);
+                                startActivity(intentmain);
+                                finish();
+                            }
+                        }).setPositiveButton("Không", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(intentmain);
+                        finish();
+                    }
+                });
+                stopTimer(); // stop time when player pass the level
+                AlertDialog alert = dialogbuil.create();
+                alert.show();
             }
         });
         btnstart_pause.setOnClickListener(new View.OnClickListener() {
@@ -124,6 +169,7 @@ public class Game4Activity extends AppCompatActivity {
                 iv_38.setEnabled(true);
                 iv_39.setEnabled(true);
                 iv_40.setEnabled(true);
+                btnexit.setEnabled(true);
 
                 if(mTimerunning){
                     stopTimer();
@@ -162,84 +208,84 @@ public class Game4Activity extends AppCompatActivity {
         /// Event Image
         iv_29.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {music.ClickSound(Game4Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_29, theCard);
             }
         });
         iv_30.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {music.ClickSound(Game4Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_30, theCard);
             }
         });
         iv_31.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {music.ClickSound(Game4Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_31, theCard);
             }
         });
         iv_32.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {music.ClickSound(Game4Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_32, theCard);
             }
         });
         iv_33.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {music.ClickSound(Game4Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_33, theCard);
             }
         });
         iv_34.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {music.ClickSound(Game4Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_34, theCard);
             }
         });
         iv_35.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {music.ClickSound(Game4Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_35, theCard);
             }
         });
         iv_36.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {music.ClickSound(Game4Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_36, theCard);
             }
         });
         iv_37.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {music.ClickSound(Game4Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_37, theCard);
             }
         });
         iv_38.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {music.ClickSound(Game4Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_38, theCard);
             }
         });
         iv_39.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {music.ClickSound(Game4Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_39, theCard);
             }
         });
         iv_40.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {music.ClickSound(Game4Activity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_40, theCard);
             }
@@ -315,6 +361,7 @@ public class Game4Activity extends AppCompatActivity {
     }
     private void checkImg() {
         if (firstCard == secondCard) {
+            music.Windraw(Game4Activity.this);
             if (clickedFirst == 0) {
                 iv_29.setVisibility(View.INVISIBLE);
             } else if (clickedFirst == 1) {
@@ -428,6 +475,7 @@ public class Game4Activity extends AppCompatActivity {
                 iv_38.getVisibility() == View.INVISIBLE&&
                 iv_39.getVisibility() == View.INVISIBLE&&
                 iv_40.getVisibility() == View.INVISIBLE){
+            music.WinGame(Game4Activity.this);
             AlertDialog.Builder dialogbuider = new AlertDialog.Builder(Game4Activity.this);
             dialogbuider.setMessage("Chúc mừng bạn đã vượt qua vòng 4").setCancelable(false)
                     .setNegativeButton("Tiếp Tục", new DialogInterface.OnClickListener() {
@@ -469,6 +517,7 @@ public class Game4Activity extends AppCompatActivity {
             public void onFinish() {
                 tv_time.setText("Hết Giờ!!!");
                 mTimerunning = false;
+                music.Lose(Game4Activity.this);
                 AlertDialog.Builder dialogbuildtimeup = new AlertDialog.Builder(Game4Activity.this);
                 dialogbuildtimeup.setMessage("Thua rồi! Bạn có muốn chơi lại không ?").setCancelable(false)
                         .setNegativeButton("Có", new DialogInterface.OnClickListener() {
@@ -481,6 +530,8 @@ public class Game4Activity extends AppCompatActivity {
                         }).setPositiveButton("Không", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        score = String.valueOf(Totalscore);
+                        SaveS(score);
                         finish();
                         startActivity(intentmain);
                     }
@@ -490,13 +541,13 @@ public class Game4Activity extends AppCompatActivity {
             }
         }.start();
         mTimerunning = true;
-        btnstart_pause.setText("Tạm Dừng");
+        btnstart_pause.setBackgroundResource(R.drawable.btnpause);
 
     }
     public void stopTimer(){
         mCoundowntime.cancel();
         mTimerunning = false;
-        btnstart_pause.setText("Bắt Đầu");
+        btnstart_pause.setBackgroundResource(R.drawable.btnplay);
     }
     public void updateTimer(){
         int minute = (int) (timeLeftinMilliseconds / 1000 )/60;
@@ -504,5 +555,57 @@ public class Game4Activity extends AppCompatActivity {
 
         String timeLeftTextFormat = String.format(Locale.getDefault(),"%02d:%02d", minute, seconds);
         tv_time.setText(timeLeftTextFormat);
+    }
+
+    // Save score
+    public void SaveS(final String score){
+        final String time = sf.format(datetime);
+
+        sessionManager = new SessionManager(this);
+        sessionManager.isLogin();
+        HashMap<String, String> user = sessionManager.getUserDetail();
+        final String username = user.get(sessionManager.USERNAME);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SAVESCORE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success =  jsonObject.getString("success");
+
+                            if (success.equals("1")) {
+                                Toast.makeText(Game4Activity.this, "Save Success!", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(Game4Activity.this, "Save Error!" + e.toString(), Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //Toast.makeText(RegisterActivity.this, "Register Error!" + error.toString(), Toast.LENGTH_SHORT).show();
+
+                    }
+                })
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("score", score);
+                params.put("time", time);
+                params.put("username", username);
+                return params;
+            }
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 }

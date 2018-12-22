@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -25,12 +26,13 @@ import java.util.Map;
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText usernames, passwords;
-    private Button btnRegist;
+    private Button btnRegist, btnCancle;
+    private ProgressBar loading2;
     private static String URL_REGIST = "http://ecgame.000webhostapp.com/register.php";
     String username = "";
     String password = "";
     Intent intentLogin;
-
+    Music music = new Music();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,13 +41,26 @@ public class RegisterActivity extends AppCompatActivity {
         usernames = (EditText)findViewById(R.id.textName);
         passwords = (EditText)findViewById(R.id.pass);
         btnRegist = (Button)findViewById(R.id.login);
-
+        btnCancle = (Button)findViewById(R.id.button20);
+        loading2 = (ProgressBar)findViewById(R.id.progressBar2);
         intentLogin = new Intent(this, LoginActivity.class);
 
         btnRegist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                music.ClickSound(RegisterActivity.this);
+                btnRegist.setVisibility(View.INVISIBLE);
+                btnCancle.setVisibility(View.INVISIBLE);
+                loading2.setVisibility(View.VISIBLE);
                 Register();
+            }
+        });
+
+        btnCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(intentLogin);
+                finish();
             }
         });
     }
@@ -63,23 +78,25 @@ public class RegisterActivity extends AppCompatActivity {
                             String success =  jsonObject.getString("success");
 
                             if (success.equals("1")) {
-                                Toast.makeText(RegisterActivity.this, "Register Success!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
                                 startActivity(intentLogin);
                                 finish();
                             }
 
                         }catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(RegisterActivity.this, "Register Error!" + e.toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "Đăng ký thất bại!" + e.toString(), Toast.LENGTH_SHORT).show();
                             btnRegist.setVisibility(View.VISIBLE);
+                            loading2.setVisibility(View.GONE);
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(RegisterActivity.this, "Register Error!" + error.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "Đăng ký thất bại!" + error.toString(), Toast.LENGTH_SHORT).show();
                         btnRegist.setVisibility(View.VISIBLE);
+                        loading2.setVisibility(View.GONE);
                     }
                 })
         {

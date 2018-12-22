@@ -9,15 +9,40 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class Frui_NewGameActivity extends AppCompatActivity {
+    // save score
+    Date datetime = new Date();
+    SimpleDateFormat sf = new SimpleDateFormat("E yyyy.MM.dd 'vào' hh:mm:ss a");
+    private static String URL_SAVESCORE = "http://ecgame.000webhostapp.com/savescore.php";
+    String score = "";
+    SessionManager sessionManager;
+    // ----- end save score
+
     TextView tv_score, tv_time;
     Button btnstart_pause, btnexit;
     ImageView iv_11, iv_12, iv_13, iv_14;
@@ -38,9 +63,11 @@ public class Frui_NewGameActivity extends AppCompatActivity {
     private CountDownTimer mCoundowntime;
     private long timeLeftinMilliseconds = START_TIME_IN_MILLIS;
     private boolean mTimerunning;
+    Music music = new Music();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_frui__new_game);
 
         tv_score = (TextView) findViewById(R.id.textViewfr1);
@@ -66,14 +93,15 @@ public class Frui_NewGameActivity extends AppCompatActivity {
         iv_12.setEnabled(false);
         iv_13.setEnabled(false);
         iv_14.setEnabled(false);
+        btnexit.setEnabled(false);
 
         /// main_activity intent
         intentmain = new Intent(this, MainScreeenActivity.class);
         intentfruit = new Intent(this, Frui_NewGameActivity.class);
         intentfruit2 = new Intent(this, Fui_Game2Activity.class);
         /// change color score
-        tv_score.setTextColor(Color.WHITE);
-        tv_time.setTextColor(Color.WHITE);
+        tv_score.setTextColor(0xFFF06D2F);
+        tv_time.setTextColor(0xFFF06D2F);
         tv_score.setText("Điểm của bạn:" + Totalscore);
         ///load cards image
         frontOfCardResources();
@@ -81,9 +109,26 @@ public class Frui_NewGameActivity extends AppCompatActivity {
         btnexit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                startActivity(intentmain);
-
+                AlertDialog.Builder dialogbuil = new AlertDialog.Builder(Frui_NewGameActivity.this);
+                dialogbuil.setMessage("Bạn có muốn lưu điểm không ?").setCancelable(false)
+                        .setNegativeButton("Có", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                score = String.valueOf(Totalscore);
+                                SaveS(score);
+                                startActivity(intentmain);
+                                finish();
+                            }
+                        }).setPositiveButton("Không", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(intentmain);
+                        finish();
+                    }
+                });
+                stopTimer(); // stop time when player pass the level
+                AlertDialog alert = dialogbuil.create();
+                alert.show();
             }
         });
 
@@ -96,12 +141,20 @@ public class Frui_NewGameActivity extends AppCompatActivity {
                 iv_12.setEnabled(true);
                 iv_13.setEnabled(true);
                 iv_14.setEnabled(true);
-
+                btnexit.setEnabled(true);
                 // start timer
                 if (mTimerunning){
                     stopTimer();
+                    iv_11.setEnabled(false);
+                    iv_12.setEnabled(false);
+                    iv_13.setEnabled(false);
+                    iv_14.setEnabled(false);
                 } else {
                     startTimer();
+                    iv_11.setEnabled(true);
+                    iv_12.setEnabled(true);
+                    iv_13.setEnabled(true);
+                    iv_14.setEnabled(true);
                 }
 
             }
@@ -113,28 +166,28 @@ public class Frui_NewGameActivity extends AppCompatActivity {
         /// Event Image
         iv_11.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { music.ClickSound(Frui_NewGameActivity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_11, theCard);
             }
         });
         iv_12.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {music.ClickSound(Frui_NewGameActivity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_12, theCard);
             }
         });
         iv_13.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {music.ClickSound(Frui_NewGameActivity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_13, theCard);
             }
         });
         iv_14.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {music.ClickSound(Frui_NewGameActivity.this);
                 int theCard = Integer.parseInt((String) v.getTag());
                 doStuff(iv_14, theCard);
             }
@@ -188,6 +241,7 @@ public class Frui_NewGameActivity extends AppCompatActivity {
 
     private void checkImg() {
         if (firstCard == secondCard) {
+            music.Windraw(Frui_NewGameActivity.this);
             if (clickedFirst == 0) {
                 iv_11.setVisibility(View.INVISIBLE);
             } else if (clickedFirst == 1) {
@@ -247,6 +301,7 @@ public class Frui_NewGameActivity extends AppCompatActivity {
                 iv_12.getVisibility() == View.INVISIBLE &&
                 iv_13.getVisibility() == View.INVISIBLE &&
                 iv_14.getVisibility() == View.INVISIBLE){
+            music.WinGame(Frui_NewGameActivity.this);
             AlertDialog.Builder dialogbuider = new AlertDialog.Builder(Frui_NewGameActivity.this);
             dialogbuider.setMessage("Chúc mừng bạn đã vượt qua vòng 1").setCancelable(false)
                     .setNegativeButton("Tiếp Tục", new DialogInterface.OnClickListener() {
@@ -281,6 +336,7 @@ public class Frui_NewGameActivity extends AppCompatActivity {
             public void onFinish() {
                 tv_time.setText("Hết Giờ!!!");
                 mTimerunning = false;
+                music.Lose(Frui_NewGameActivity.this);
                 AlertDialog.Builder dialogbuildtimeup = new AlertDialog.Builder(Frui_NewGameActivity.this);
                 dialogbuildtimeup.setMessage("Thua rồi! Bạn có muốn chơi lại không ?").setCancelable(false)
                         .setNegativeButton("Có", new DialogInterface.OnClickListener() {
@@ -293,6 +349,8 @@ public class Frui_NewGameActivity extends AppCompatActivity {
                         }).setPositiveButton("Không", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        score = String.valueOf(Totalscore);
+                        SaveS(score);
                         startActivity(intentmain);
                         finish();
                     }
@@ -302,13 +360,12 @@ public class Frui_NewGameActivity extends AppCompatActivity {
             }
         }.start();
         mTimerunning = true;
-        btnstart_pause.setText("Tạm Dừng");
-
+        btnstart_pause.setBackgroundResource(R.drawable.btnpause);
     }
     public void stopTimer(){
         mCoundowntime.cancel();
         mTimerunning = false;
-        btnstart_pause.setText("Bắt Đầu");
+        btnstart_pause.setBackgroundResource(R.drawable.btnplay);
     }
     public void updateTimer(){
         int minute = (int) (timeLeftinMilliseconds / 1000 )/60;
@@ -316,5 +373,56 @@ public class Frui_NewGameActivity extends AppCompatActivity {
 
         String timeLeftTextFormat = String.format(Locale.getDefault(),"%02d:%02d", minute, seconds);
         tv_time.setText(timeLeftTextFormat);
+    }
+
+    public void SaveS(final String score){
+        final String time = sf.format(datetime);
+
+        sessionManager = new SessionManager(this);
+        sessionManager.isLogin();
+        HashMap<String, String> user = sessionManager.getUserDetail();
+        final String username = user.get(sessionManager.USERNAME);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SAVESCORE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success =  jsonObject.getString("success");
+
+                            if (success.equals("1")) {
+                                Toast.makeText(Frui_NewGameActivity.this, "Save Success!", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(Frui_NewGameActivity.this, "Save Error!" + e.toString(), Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //Toast.makeText(RegisterActivity.this, "Register Error!" + error.toString(), Toast.LENGTH_SHORT).show();
+
+                    }
+                })
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("score", score);
+                params.put("time", time);
+                params.put("username", username);
+                return params;
+            }
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 }

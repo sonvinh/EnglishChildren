@@ -14,11 +14,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 
 public class MainScreeenActivity extends AppCompatActivity {
-    Button btnnew, btnguide, btnhigh, btnexit, btnlogout;
+    Button btnnew, btnguide, btnhigh, btnexit, btnlogout, btnhistory,btnsound;
     TextView textWelcom;
-    Intent intentthread , intentguide, intenthig;
-
+    Intent intentthread , intentguide, intenthig, intenthistory;
+    Music music = new Music();
     SessionManager sessionManager;
+    boolean isPlay = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,17 +30,24 @@ public class MainScreeenActivity extends AppCompatActivity {
         btnexit = (Button)findViewById(R.id.button4);
         btnlogout = (Button)findViewById(R.id.logout);
         textWelcom = (TextView)findViewById(R.id.textView9);
+        btnhistory = (Button)findViewById(R.id.button18);
+        btnsound = (Button)findViewById(R.id.button19);
+
+        music.MainSound(MainScreeenActivity.this);
+
         intentguide = new Intent(this, GuideActivity.class);
         intentthread = new Intent(this, TopicActivity.class);
         intenthig = new Intent(this,HighestScoreActivity.class);
 
-        sessionManager = new SessionManager(this);
+        intenthistory = new Intent(this, HistoryActivity.class);
 
+        sessionManager = new SessionManager(this);
         sessionManager.isLogin();
+
         HashMap<String, String> user = sessionManager.getUserDetail();
         String mUsename = user.get(sessionManager.USERNAME);
 
-        textWelcom.setText("Hello"+" "+mUsename);
+        textWelcom.setText("Hello"+ "\n" +mUsename);
 //        Intent intent = getIntent();
 //        String extraUsername = intent.getStringExtra("username");
 
@@ -70,6 +78,7 @@ public class MainScreeenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finishAffinity();
+                music.Pause();
             }
         });
 
@@ -77,6 +86,29 @@ public class MainScreeenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(intenthig);
+            }
+        });
+
+        btnhistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(intenthistory);
+            }
+        });
+
+        btnsound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isPlay == false){
+                    music.Pause();
+                    isPlay = true;
+                    btnsound.setBackgroundResource(R.drawable.btnmute);
+                }
+                else if (isPlay == true){
+                    music.MainSound(MainScreeenActivity.this);
+                    isPlay = false;
+                    btnsound.setBackgroundResource(R.drawable.btnsound);
+                }
             }
         });
     }

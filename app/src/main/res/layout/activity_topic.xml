@@ -4,16 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".TopicActivity">
 
     <Button
         android:id="@+id/button15"
-        android:layout_width="345dp"
-        android:layout_height="155dp"
+        android:layout_width="350dp"
+        android:layout_height="160dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Animal"
+        android:background="@drawable/backgroundtopicani"
         app:layout_constraintBottom_toTopOf="@+id/button16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.521"
@@ -23,13 +24,13 @@
 
     <Button
         android:id="@+id/button16"
-        android:layout_width="345dp"
-        android:layout_height="155dp"
+        android:layout_width="350dp"
+        android:layout_height="160dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Fruit"
+        android:background="@drawable/backgroundtopicfruit"
         app:layout_constraintBottom_toTopOf="@+id/button17"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.652"
@@ -38,12 +39,12 @@
 
     <Button
         android:id="@+id/button17"
-        android:layout_width="345dp"
-        android:layout_height="155dp"
+        android:layout_width="350dp"
+        android:layout_height="160dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Furniture"
+        android:background="@drawable/backgroundtopicfurn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.652"
